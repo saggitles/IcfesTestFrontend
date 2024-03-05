@@ -3,52 +3,74 @@ import { useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import Swal from "sweetalert2";
 
-const EditProduct = (props: Props) => {
-  const [show, setShow] = useState(props.show);
-  const [item, setItem] = useState<Product>(props.product);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+type ProductType = {
+  id: number;
+  name: string;
+  material: string;
+  type: string;
+  price: number;
+  units: number;
+  description: string;
+  weight: number;
+  length: number;
+  width: number;
+  color: string;
+};
 
-  const [values, setValues] = useState<Product>(props.product);
+type EditProductProps = {
+  show: boolean;
+  product: ProductType;
+  callback: (product: ProductType) => void;
+};
 
+const EditProduct: React.FC<EditProductProps> = ({
+  show,
+  product,
+  callback,
+}) => {
+  const [showModal, setShowModal] = useState(show);
+  const [editedProduct, setEditedProduct] = useState<ProductType>(product);
   useEffect(() => {
-    //axios
-    //  .get("http://localhost:8080/product/list")
-    // .then((response) => {
-    //  setList(response.data);
-    // })
-    // .catch((error) => {
-    //  console.log("algo salio mal!", error);
-    //});
-    //setItem();
-    //console.log(cloneListEdit);
-    setItem(props.product); // Update the item whenever the product prop changes
-  }, [props.product]);
+    setShowModal(show);
+    setEditedProduct(product); // Reset the form when the product changes
+  }, [show, product]);
 
-  const handleInputChange = (event: { target: { name: any; value: any } }) => {
-    const { name, value } = event.target;
-    setValues({
-      ...values,
-      [name]: value,
-    });
+  const handleChange = (e) => {
+    // Only update price and type
+    if (e.target.name === "price" || e.target.name === "type") {
+      setEditedProduct({ ...editedProduct, [e.target.name]: e.target.value });
+    }
+  };
+
+  const handleSubmit = () => {
+    console.log(editedProduct);
+    axios
+      .put(
+        `http://localhost:8080/product/update/${editedProduct.id}`,
+        editedProduct
+      )
+      .then((response) => {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Your work has been updated",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        console.log("Exitoooo", response);
+        callback(editedProduct);
+        setShowModal(false);
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
   };
 
   return (
     <>
-      {props.launchBtnEdit && (
-        <button className="btn-action">
-          <span
-            className="material-symbols-rounded size-14"
-            onClick={handleShow}
-          >
-            edit
-          </span>
-        </button>
-      )}
-
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>Producto Detalle</Modal.Title>
+          <Modal.Title>Edit Product</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="row">
@@ -60,7 +82,7 @@ const EditProduct = (props: Props) => {
                 name="name"
                 disabled
                 readOnly
-                value={item.name}
+                value={editedProduct.name}
               />
               <br />
               <Form.Label>Material</Form.Label>
@@ -70,7 +92,7 @@ const EditProduct = (props: Props) => {
                 name="material"
                 disabled
                 readOnly
-                value={item.material}
+                value={editedProduct.material}
               />
               <br />
               <Form.Label>Tipo</Form.Label>
@@ -78,8 +100,8 @@ const EditProduct = (props: Props) => {
                 type="text"
                 placeholder="Tipo"
                 name="type"
-                value={item.type}
-                onChange={handleInputChange}
+                value={editedProduct.type}
+                onChange={handleChange}
               />
               <br />
               <Form.Label>Precio</Form.Label>
@@ -87,8 +109,8 @@ const EditProduct = (props: Props) => {
                 type="text"
                 placeholder="Precio"
                 name="price"
-                value={item.price}
-                onChange={handleInputChange}
+                value={editedProduct.price}
+                onChange={handleChange}
               />
               <br />
               <Form.Label>Unidades</Form.Label>
@@ -98,7 +120,7 @@ const EditProduct = (props: Props) => {
                 name="units"
                 disabled
                 readOnly
-                value={item.units}
+                value={editedProduct.units}
               />
               <br />
             </div>
@@ -110,7 +132,7 @@ const EditProduct = (props: Props) => {
                 name="weight"
                 disabled
                 readOnly
-                value={item.weight}
+                value={editedProduct.weight}
               />
               <br />
               <Form.Label>Largo</Form.Label>
@@ -120,7 +142,7 @@ const EditProduct = (props: Props) => {
                 name="length"
                 disabled
                 readOnly
-                value={item.length}
+                value={editedProduct.length}
               />
               <br />
               <Form.Label>Ancho</Form.Label>
@@ -130,7 +152,7 @@ const EditProduct = (props: Props) => {
                 name="width"
                 disabled
                 readOnly
-                value={item.width}
+                value={editedProduct.width}
               />
               <br />
               <Form.Label>Color</Form.Label>
@@ -140,7 +162,7 @@ const EditProduct = (props: Props) => {
                 name="color"
                 disabled
                 readOnly
-                value={item.color}
+                value={editedProduct.color}
               />
               <br />
               <Form.Label>Descripcion</Form.Label>
@@ -150,23 +172,18 @@ const EditProduct = (props: Props) => {
                 name="description"
                 disabled
                 readOnly
-                value={item.description}
+                value={editedProduct.description}
               />
               <br />
             </div>
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button variant="secondary" onClick={() => setShowModal(false)}>
             Close
           </Button>
-          <Button
-            variant="primary"
-            onClick={() => {
-              handleClose();
-            }}
-          >
-            close
+          <Button variant="primary" onClick={handleSubmit}>
+            Save Changes
           </Button>
         </Modal.Footer>
       </Modal>

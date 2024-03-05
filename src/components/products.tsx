@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import AddProduct from "./addProduct";
 import Swal from "sweetalert2";
 import ViewDetail from "./viewDetail";
@@ -7,6 +7,7 @@ import EditProduct from "./editProduct";
 
 const Products = () => {
   const [list, setList] = useState([]);
+  const [editingProduct, setEditingProduct] = useState(null);
 
   const listAlpha = list.sort((a, b) => a.name.localeCompare(b.name));
 
@@ -21,7 +22,7 @@ const Products = () => {
       });
   }, []);
 
-  const handlerDelete = (id) => {
+  const handlerDelete = (id: any) => {
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -49,6 +50,18 @@ const Products = () => {
       }
     });
   };
+
+  const handleEdit = (product: SetStateAction<null>) => {
+    setEditingProduct(product);
+  };
+
+  const handleUpdateProduct = (updatedProduct: { id: any }) => {
+    const updatedList = list.map((product) =>
+      product.id === updatedProduct.id ? updatedProduct : product
+    );
+    setList(updatedList);
+  };
+
   return (
     <>
       <link
@@ -126,18 +139,18 @@ const Products = () => {
                                 Delete
                               </span>
                             </button>
+                            <button className="btn-action">
+                              <span
+                                className="material-symbols-rounded size-14"
+                                onClick={() => handleEdit(item)}
+                              >
+                                Edit
+                              </span>
+                            </button>
                             <EditProduct
-                              show={false}
-                              launchBtnEdit
+                              show={editingProduct?.id === item.id}
                               product={item}
-                              callback={async (result) => {
-                                console.log("result", result);
-                                const cloneList = list.slice();
-                                console.log("cloneList before", cloneList);
-                                cloneList.push(result);
-                                console.log("cloneList after", cloneList);
-                                setList(cloneList);
-                              }}
+                              callback={handleUpdateProduct}
                             />
                           </td>
                         </tr>
