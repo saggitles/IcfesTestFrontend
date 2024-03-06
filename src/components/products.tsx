@@ -123,7 +123,7 @@ const Products = () => {
                           <td className="fit-status">{item.name}</td>
                           <td className="fit-status">{item.material}</td>
                           <td className="fit-status">{item.type}</td>
-                          <td className="fit-status">{item.price}</td>
+                          <td className="fit-status">{item.price} COP</td>
                           <td className="fit-actions">
                             <ViewDetail
                               show={false}

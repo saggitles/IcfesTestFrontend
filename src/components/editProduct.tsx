@@ -103,7 +103,7 @@ const EditProduct: React.FC<EditProductProps> = ({
                 onChange={handleChange}
               />
               <br />
-              <Form.Label>Precio</Form.Label>
+              <Form.Label>Precio COP</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Precio"
@@ -124,7 +124,7 @@ const EditProduct: React.FC<EditProductProps> = ({
               <br />
             </div>
             <div className="col">
-              <Form.Label>Peso</Form.Label>
+              <Form.Label>Peso g</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Peso"
@@ -134,7 +134,7 @@ const EditProduct: React.FC<EditProductProps> = ({
                 value={editedProduct.weight}
               />
               <br />
-              <Form.Label>Largo</Form.Label>
+              <Form.Label>Largo mm</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Largo"
@@ -144,7 +144,7 @@ const EditProduct: React.FC<EditProductProps> = ({
                 value={editedProduct.length}
               />
               <br />
-              <Form.Label>Ancho</Form.Label>
+              <Form.Label>Ancho mm</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Ancho"

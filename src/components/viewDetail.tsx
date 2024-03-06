@@ -57,7 +57,7 @@ function ViewDetail(props) {
                 value={props.product.type}
               />
               <br />
-              <Form.Label>Precio</Form.Label>
+              <Form.Label>Precio COP</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Precio"
@@ -79,7 +79,7 @@ function ViewDetail(props) {
               <br />
             </div>
             <div className="col">
-              <Form.Label>Peso</Form.Label>
+              <Form.Label>Peso g</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Peso"
@@ -89,7 +89,7 @@ function ViewDetail(props) {
                 value={props.product.weight}
               />
               <br />
-              <Form.Label>Largo</Form.Label>
+              <Form.Label>Largo mm</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Largo"
@@ -99,7 +99,7 @@ function ViewDetail(props) {
                 value={props.product.length}
               />
               <br />
-              <Form.Label>Ancho</Form.Label>
+              <Form.Label>Ancho mm</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Ancho"
