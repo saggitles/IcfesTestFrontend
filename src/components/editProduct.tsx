@@ -32,11 +32,10 @@ const EditProduct: React.FC<EditProductProps> = ({
   const [editedProduct, setEditedProduct] = useState<ProductType>(product);
   useEffect(() => {
     setShowModal(show);
-    setEditedProduct(product); // Reset the form when the product changes
+    setEditedProduct(product);
   }, [show, product]);
 
   const handleChange = (e) => {
-    // Only update price and type
     if (e.target.name === "price" || e.target.name === "type") {
       setEditedProduct({ ...editedProduct, [e.target.name]: e.target.value });
     }

@@ -51,7 +51,7 @@ const Products = () => {
     });
   };
 
-  const handleEdit = (product: SetStateAction<null>) => {
+  const handleEdit = (product) => {
     setEditingProduct(product);
   };
 
@@ -147,15 +147,17 @@ const Products = () => {
                                 Edit
                               </span>
                             </button>
-                            <EditProduct
-                              show={editingProduct?.id === item.id}
-                              product={item}
-                              callback={handleUpdateProduct}
-                            />
                           </td>
                         </tr>
                       );
                     })}
+                    {editingProduct && (
+                      <EditProduct
+                        show={Boolean(editingProduct)}
+                        product={editingProduct}
+                        callback={handleUpdateProduct}
+                      />
+                    )}
                   </tbody>
                 </table>
               </div>
